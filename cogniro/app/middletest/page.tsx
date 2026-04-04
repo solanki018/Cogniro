@@ -30,6 +30,11 @@ export default function TestSetup() {
   };
 
   const generateTest = async () => {
+    if (topics.length === 0) {
+      alert("Please select at least one topic");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/test/create", {
@@ -48,6 +53,8 @@ export default function TestSetup() {
 
       if (res.ok || res.status === 201) {
         localStorage.setItem("currentTestId", data.testId);
+        localStorage.setItem("currentQuestions", JSON.stringify(data.questions || []));
+        localStorage.removeItem("currentAnswers");
         router.push("/test");
       } else {
         alert(data.message || "Error generating test");
