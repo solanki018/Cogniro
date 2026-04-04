@@ -1,74 +1,129 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { motion } from "framer-motion";
+import "./global.css";
 export default function Home() {
   const router = useRouter();
 
+  const [showIntro, setShowIntro] = useState(true);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowIntro(false);
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) setUser(JSON.parse(storedUser));
+    }, 1800);
+  }, []);
+
+  useEffect(() => {
+    if (user) router.push("/dashboard");
+  }, [user]);
+
+  // 🚀 INTRO SCREEN
+  if (showIntro) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-black via-zinc-900 to-black text-white">
+        <motion.h1
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1.2 }}
+          transition={{ duration: 1 }}
+          className="text-6xl font-extrabold tracking-wide"
+        >
+          Cogniro
+        </motion.h1>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-100 dark:bg-black text-center p-6">
-      
-      {/* 🔥 Title */}
-      <h1 className="text-4xl font-bold mb-4">
-        🚀 Cogniro AI Test Platform
-      </h1>
+    <div className="min-h-screen bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-black dark:to-zinc-900 text-center px-6 py-10">
 
-      {/* Subtitle */}
-      <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-xl">
-        Practice Aptitude, SQL & Role-based questions with AI.  
-        Track your performance, improve weak areas, and crack interviews.
-      </p>
+      {/* HERO */}
+      <motion.div
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-10"
+      >
+        <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
+          Welcome to Cogniro
+        </h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
+          Practice smarter with AI-generated questions, track progress, and level up your skills.
+        </p>
+      </motion.div>
 
-      {/* 🔥 Buttons */}
-      <div className="flex gap-4 flex-wrap justify-center">
-        
+      {/* BUTTONS */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.3 }}
+        className="flex justify-center gap-6 mb-12"
+      >
         <button
-          onClick={() => router.push("/test")}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg"
+          onClick={() => router.push("/login")}
+          className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold shadow-lg hover:scale-105 transition"
         >
-          Start Test
+          Login
         </button>
 
         <button
-          onClick={() => router.push("/dashboard")}
-          className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-lg"
+          onClick={() => router.push("/signup")}
+          className="px-8 py-3 rounded-xl bg-zinc-800 text-white font-semibold shadow-lg hover:scale-105 transition"
         >
-          Dashboard
+          Signup
         </button>
+      </motion.div>
 
-        <button
-          onClick={() => router.push("/mistakes")}
-          className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg text-lg"
-        >
-          Mistake Notebook
-        </button>
-      </div>
+      {/* FEATURE CARDS */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+      >
+        {[
+          {
+            title: "AI Questions",
+            icon: "🤖",
+            desc: "Dynamic questions powered by Gemini AI",
+          },
+          {
+            title: "Analytics",
+            icon: "📊",
+            desc: "Track performance and growth visually",
+          },
+          {
+            title: "Smart Learning",
+            icon: "🧠",
+            desc: "Learn from mistakes with insights",
+          },
+        ].map((item, i) => (
+          <motion.div
+            key={i}
+            whileHover={{ scale: 1.05 }}
+            className="p-6 rounded-2xl backdrop-blur-lg bg-white/70 dark:bg-white/5 border border-white/20 shadow-xl"
+          >
+            <div className="text-4xl mb-3">{item.icon}</div>
+            <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              {item.desc}
+            </p>
+          </motion.div>
+        ))}
+      </motion.div>
 
-      {/* 🔥 Features */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
-        
-        <div className="p-4 bg-white dark:bg-zinc-900 rounded shadow">
-          <h3 className="font-semibold text-lg">🤖 AI Questions</h3>
-          <p className="text-sm text-gray-500">
-            Dynamic questions generated using Gemini API
-          </p>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-zinc-900 rounded shadow">
-          <h3 className="font-semibold text-lg">📊 Analytics</h3>
-          <p className="text-sm text-gray-500">
-            Track your performance and improvement
-          </p>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-zinc-900 rounded shadow">
-          <h3 className="font-semibold text-lg">🧠 Smart Learning</h3>
-          <p className="text-sm text-gray-500">
-            Learn from mistakes with revision system
-          </p>
-        </div>
-
-      </div>
+      {/* FOOTER */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="mt-16 text-sm text-gray-500"
+      >
+        © {new Date().getFullYear()} Cogniro • Built with ❤️
+      </motion.p>
     </div>
   );
 }
