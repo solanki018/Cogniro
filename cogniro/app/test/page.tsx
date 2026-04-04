@@ -60,7 +60,7 @@ export default function TestPage() {
     const finalResult = { 
       ...result, 
       questions: qData.questions || [],
-      testType: questions[0]?.topic || "AI Test" 
+      testType: "AI Test" 
     };
     
     localStorage.setItem("result", JSON.stringify(finalResult));

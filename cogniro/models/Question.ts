@@ -4,6 +4,7 @@ const QuestionSchema = new Schema({
   testId: { type: Schema.Types.ObjectId, ref: "Test" },
   question: String,
   options: [String],
+  topic: [String],
   correctAnswer: String,
   explanation: String, // Good to have for the results page
 });
