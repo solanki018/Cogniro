@@ -5,8 +5,7 @@ const QuestionSchema = new Schema({
   question: String,
   options: [String],
   correctAnswer: String,
-  explanation: String,
-  topic: String,
+  explanation: String, // Good to have for the results page
 });
 
 export default models.Question || model("Question", QuestionSchema);
