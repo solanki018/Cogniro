@@ -152,6 +152,12 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+        <button
+  onClick={() => router.push("/mistake")}
+  className="p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-sm font-semibold"
+>
+  🧠 Mistake Notebook
+</button>
       </motion.div>
 
       {/* MAIN CONTENT */}
@@ -184,7 +190,7 @@ export default function Dashboard() {
             <TrendingUp size={20} className="text-blue-500" />
             Growth Analytics
           </h2>
-          <div className="h-[300px] w-full">
+          <div className="w-full h-[320px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.history}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#3f3f46" opacity={0.2} />

@@ -17,21 +17,20 @@ export default function ResultPage() {
   const [correctCount, setCorrectCount] = useState(0);
 
   useEffect(() => {
-    const stored = localStorage.getItem("result");
-    if (stored) {
-      const result = JSON.parse(stored);
-      setQuestions(result.questions || []);
+  const stored = localStorage.getItem("result");
+  if (stored) {
+    const result = JSON.parse(stored);
+    setQuestions(result.questions || []);
 
-      // ✅ Calculate score
-      let correct = 0;
-      result.questions.forEach((q: Question) => {
-        if (q.userAnswer === q.correctAnswer) correct++;
-      });
+    // 🔹 USE BACKEND SCORE
+    const backendScore = result.score || 0;
+    const correct = result.correctCount || 0;
 
-      setCorrectCount(correct);
-      setScore(Math.round((correct / result.questions.length) * 100));
-    }
-  }, []);
+    setScore(backendScore);
+    setCorrectCount(correct);
+  }
+}, []);
+
 
   if (questions.length === 0) return <p className="p-6 text-center">Loading results...</p>;
 

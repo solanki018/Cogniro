@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
           question: q.question,
           selectedAnswer: userAns?.selectedAnswer || "",
           correctAnswer: q.correctAnswer,
+          explanation: q.explanation || "",
           // Topic ko string me convert karo agar array ho
           topic: Array.isArray(q.topic) ? q.topic[0] : q.topic || "General",
         });

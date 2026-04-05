@@ -22,7 +22,10 @@ const MistakeSchema = new Schema(
       type: String,
       required: true,
     },
-
+explanation: {
+  type: String,
+  default: "",
+},
     topic: {
       type: String,
       default: "General",
