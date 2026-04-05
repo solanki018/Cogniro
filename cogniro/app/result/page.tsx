@@ -35,14 +35,14 @@ export default function ResultPage() {
   if (questions.length === 0) return <p className="p-6 text-center">Loading results...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-gray-100 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-gray-100 p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-blue-600 dark:text-blue-400">
+          <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-blue-600 dark:text-blue-400">
             🎯 Your Test Results
           </h1>
-          <p className="text-lg text-gray-700 dark:text-gray-300">
+          <p className="text-sm sm:text-lg text-gray-700 dark:text-gray-300">
             Score: <span className="font-semibold">{score}</span> / 100 | Correct: <span className="font-semibold">{correctCount}</span> / {questions.length}
           </p>
         </div>
@@ -50,8 +50,8 @@ export default function ResultPage() {
         {/* Questions */}
         <div className="space-y-6">
           {questions.map((q, i) => (
-            <div key={q._id} className="p-6 bg-white dark:bg-zinc-800 rounded-2xl shadow-lg border border-gray-200 dark:border-zinc-700">
-              <p className="font-semibold text-lg mb-4 text-gray-900 dark:text-gray-100">
+            <div key={q._id} className="p-4 sm:p-6 bg-white dark:bg-zinc-800 rounded-2xl shadow-lg border border-gray-200 dark:border-zinc-700">
+              <p className="font-semibold text-base sm:text-lg mb-4 text-gray-900 dark:text-gray-100 leading-relaxed">
                 Q{i + 1}. {q.question}
               </p>
 
@@ -65,7 +65,7 @@ export default function ResultPage() {
                   // 1. Agar user ne correct select kiya → green
                   // 2. Agar user ne galat select kiya → red
                   // 3. Unselected options normal
-                  let classes = "p-3 rounded-lg border flex justify-between items-center transition-all ";
+                  let classes = "p-3 rounded-lg border flex flex-wrap gap-2 justify-between items-center transition-all text-sm sm:text-base ";
                   if (isSelected && isCorrect) classes += "bg-green-600 text-white border-green-700";
                   else if (isSelected && !isCorrect) classes += "bg-red-500 text-white border-red-600";
                   else classes += "bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-zinc-600";
@@ -94,7 +94,7 @@ export default function ResultPage() {
         <div className="mt-8 text-center">
           <button
             onClick={() => (window.location.href = "/")}
-            className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
           >
             🔙 Back to Dashboard
           </button>

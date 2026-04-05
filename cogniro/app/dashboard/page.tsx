@@ -135,13 +135,13 @@ export default function Dashboard() {
     );
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100">
+    <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100 lg:flex">
       
       {/* LEFT SIDEBAR */}
       <motion.div
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="w-72 bg-white dark:bg-zinc-900/50 backdrop-blur-xl border-r border-zinc-200 dark:border-zinc-800 p-6 flex flex-col gap-6"
+        className="w-full lg:w-72 bg-white dark:bg-zinc-900/50 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 flex flex-col gap-4 sm:gap-6"
       >
         <div className="flex items-center gap-3 mb-8">
           <div className="p-2 bg-blue-600 rounded-lg">
@@ -212,19 +212,19 @@ export default function Dashboard() {
       </motion.div>
 
       {/* MAIN CONTENT */}
-      <div className="flex-1 p-8 overflow-y-auto">
-        <header className="flex justify-between items-center mb-10">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <header className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-8 sm:mb-10">
           <div>
-            <h1 className="text-4xl font-black tracking-tight">Performance</h1>
-            <p className="text-zinc-500 mt-1">Track your growth and test history.</p>
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight">Performance</h1>
+            <p className="text-zinc-500 mt-1 text-sm sm:text-base">Track your growth and test history.</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <button className="p-2 rounded-full bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition">
               <User size={20} />
             </button>
             <button 
               onClick={() => router.push("/middletest")}
-              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition shadow-lg shadow-blue-600/20"
+              className="px-4 sm:px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-bold rounded-xl transition shadow-lg shadow-blue-600/20"
             >
               Start New Test
             </button>
@@ -241,7 +241,7 @@ export default function Dashboard() {
             <TrendingUp size={20} className="text-blue-500" />
             Growth Analytics
           </h2>
-          <div className="w-full h-[320px]">
+          <div className="w-full h-[240px] sm:h-[320px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.history}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#3f3f46" opacity={0.2} />
@@ -281,7 +281,7 @@ export default function Dashboard() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, x: -20 }}
-                    className="group flex justify-between items-center p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all"
+                    className="group flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-all"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${t.score >= 70 ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'}`}>
@@ -293,10 +293,10 @@ export default function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 self-end sm:self-auto">
                       <button 
                         onClick={() => handleDeleteTest(t._id)}
-                        className="p-2 opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+                        className="p-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
                         title="Delete record"
                       >
                         <Trash2 size={18} />

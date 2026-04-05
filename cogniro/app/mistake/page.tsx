@@ -33,11 +33,11 @@ export default function MistakesPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black p-6 text-zinc-900 dark:text-white">
+    <div className="min-h-screen bg-zinc-50 dark:bg-black p-4 sm:p-6 text-zinc-900 dark:text-white">
       
       {/* HEADER */}
       <div className="mb-8">
-        <h1 className="text-4xl font-black tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
           Mistake Notebook 🧠
         </h1>
         <p className="text-zinc-500 mt-1">
@@ -57,14 +57,14 @@ export default function MistakesPage() {
       )}
 
       {/* GRID LAYOUT */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {mistakes.map((m, index) => (
           <div
             key={index}
-            className="group p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all"
+            className="group p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all"
           >
             {/* QUESTION */}
-            <p className="font-semibold text-lg mb-3 leading-snug">
+            <p className="font-semibold text-base sm:text-lg mb-3 leading-snug">
               {m.question}
             </p>
 

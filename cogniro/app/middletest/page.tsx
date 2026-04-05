@@ -167,7 +167,7 @@ export default function TestSetup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-10 relative overflow-hidden bg-black">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-6 sm:py-10 relative overflow-hidden bg-black">
 
       {/* 🔥 BACKGROUND EFFECT */}
       <div className="absolute inset-0">
@@ -179,9 +179,9 @@ export default function TestSetup() {
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative w-full max-w-3xl p-10 rounded-3xl bg-zinc-900/80 backdrop-blur-2xl border border-zinc-700 shadow-[0_0_60px_rgba(0,0,0,0.8)] text-white"
+        className="relative w-full max-w-3xl p-5 sm:p-10 rounded-3xl bg-zinc-900/80 backdrop-blur-2xl border border-zinc-700 shadow-[0_0_60px_rgba(0,0,0,0.8)] text-white"
       >
-        <h1 className="text-4xl font-extrabold mb-2 text-center">
+        <h1 className="text-2xl sm:text-4xl font-extrabold mb-2 text-center">
           🚀 Customize Your Test
         </h1>
         <p className="text-sm text-gray-400 mb-6 text-center">
@@ -189,7 +189,7 @@ export default function TestSetup() {
         </p>
 
         {/* Type + Difficulty */}
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 mb-6">
           <div>
             <label className="block mb-2 text-sm text-gray-300">Test Type</label>
             <select
@@ -226,13 +226,13 @@ export default function TestSetup() {
             onChange={(e) => setNumQuestions(parseInt(e.target.value))}
             min={1}
             max={50}
-            className="w-32 p-3 rounded-xl bg-black border border-zinc-700 focus:ring-2 focus:ring-green-500"
+            className="w-full sm:w-32 p-3 rounded-xl bg-black border border-zinc-700 focus:ring-2 focus:ring-green-500"
           />
         </div>
 
         {/* Topics */}
         <div className="mb-8">
-          <div className="flex justify-between items-center mb-3">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3">
             <p className="text-sm text-gray-300">Select Topics</p>
             <button
               onClick={toggleSelectAll}

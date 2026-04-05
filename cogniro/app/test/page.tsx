@@ -159,33 +159,33 @@ export default function TestPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-gray-100">
       {/* Navbar */}
-      <nav className="w-full h-16 flex items-center justify-between px-6 bg-white dark:bg-zinc-800 shadow-md sticky top-0 z-10">
-        <div className="flex items-center gap-3">
-          <img src="/cognipro-logo.png" alt="Cognipro Logo" className="h-10 w-auto" />
-          <h1 className="font-bold text-xl text-blue-600 dark:text-blue-400">Cogniro AI Test</h1>
+      <nav className="w-full min-h-16 flex flex-wrap items-center justify-between gap-2 px-4 sm:px-6 py-2 bg-white dark:bg-zinc-800 shadow-md sticky top-0 z-10">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <img src="/cognipro-logo.png" alt="Cognipro Logo" className="h-8 sm:h-10 w-auto" />
+          <h1 className="font-bold text-base sm:text-xl text-blue-600 dark:text-blue-400 truncate">Cogniro AI Test</h1>
         </div>
-        <div className="font-mono font-semibold text-lg text-gray-900 dark:text-gray-100">
+        <div className="font-mono font-semibold text-base sm:text-lg text-gray-900 dark:text-gray-100">
           ⏱ {formatTime(timeLeft)}
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="flex gap-6 px-6 pt-6">
+      <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 px-4 sm:px-6 pt-4 sm:pt-6 pb-6">
         {/* Left Panel - Question */}
         <div className="flex-1">
-          <div className="mb-4 text-gray-700 dark:text-gray-300">
+          <div className="mb-4 text-sm sm:text-base text-gray-700 dark:text-gray-300">
             Question {currentIndex + 1} of {questions.length} | Tab switches: {tabSwitches}/{MAX_TAB_SWITCHES}
           </div>
 
-          <div className="p-6 bg-white dark:bg-zinc-800 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700">
-            <p className="font-semibold text-lg mb-4 text-gray-900 dark:text-gray-100">
+          <div className="p-4 sm:p-6 bg-white dark:bg-zinc-800 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700">
+            <p className="font-semibold text-base sm:text-lg mb-4 text-gray-900 dark:text-gray-100 leading-relaxed break-words">
               {currentIndex + 1}. {currentQuestion.question}
             </p>
 
             {currentQuestion.options.map((opt, i) => (
               <label
                 key={i}
-                className={`block mb-3 cursor-pointer px-4 py-2 rounded-lg border transition-all
+                className={`block mb-3 cursor-pointer px-3 sm:px-4 py-2.5 rounded-lg border transition-all text-sm sm:text-base
                   ${selectedAnswer === opt
                     ? "bg-blue-600 text-white border-blue-700"
                     : "bg-gray-100 dark:bg-zinc-700 border-gray-300 dark:border-zinc-600 hover:bg-gray-200 dark:hover:bg-zinc-600 text-gray-900 dark:text-gray-100"
@@ -204,7 +204,7 @@ export default function TestPage() {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex gap-4 mt-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
             <button
               onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
               disabled={currentIndex === 0}
@@ -233,17 +233,17 @@ export default function TestPage() {
         </div>
 
         {/* Right Panel - Progress */}
-        <div className="w-60 flex-shrink-0">
+        <div className="w-full xl:w-60 flex-shrink-0">
           <div className="p-4 bg-white dark:bg-zinc-800 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-gray-300">
             <h2 className="font-semibold mb-2">Progress</h2>
-            <ul className="space-y-1">
+            <ul className="grid grid-cols-5 sm:grid-cols-8 xl:grid-cols-1 gap-2 xl:gap-1">
               {questions.map((q, i) => (
                 <li
                   key={q._id}
-                  className={`${
+                  className={`text-sm ${
                     answers.find((a) => a.questionId === q._id)
                       ? "text-green-600 dark:text-green-400 font-semibold"
-                      : ""
+                      : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
                   Q{i + 1}

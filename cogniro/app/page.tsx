@@ -30,7 +30,7 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1.2 }}
           transition={{ duration: 1 }}
-          className="text-6xl font-extrabold tracking-wide"
+          className="text-4xl sm:text-6xl font-extrabold tracking-wide"
         >
           Cogniro
         </motion.h1>
@@ -47,10 +47,10 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-10"
       >
-        <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
+        <h1 className="text-3xl sm:text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text">
           Welcome to Cogniro
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
+        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
           Practice smarter with AI-generated questions, track progress, and level up your skills.
         </p>
       </motion.div>
@@ -60,18 +60,18 @@ export default function Home() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3 }}
-        className="flex justify-center gap-6 mb-12"
+        className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-12"
       >
         <button
           onClick={() => router.push("/login")}
-          className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold shadow-lg hover:scale-105 transition"
+          className="w-full sm:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold shadow-lg hover:scale-105 transition"
         >
           Login
         </button>
 
         <button
           onClick={() => router.push("/signup")}
-          className="px-8 py-3 rounded-xl bg-zinc-800 text-white font-semibold shadow-lg hover:scale-105 transition"
+          className="w-full sm:w-auto px-8 py-3 rounded-xl bg-zinc-800 text-white font-semibold shadow-lg hover:scale-105 transition"
         >
           Signup
         </button>
