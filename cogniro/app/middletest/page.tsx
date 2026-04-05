@@ -13,20 +13,90 @@ export default function TestSetup() {
   const [topics, setTopics] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const availableTopics = [
-    "SQL Joins",
-    "SQL Aggregates",
-    "Arrays",
-    "Strings",
-    "Data Structures",
-    "Logic",
-    "Problem Solving",
-  ];
+  // Dynamic topics based on type
+  const availableTopics = type === "sql"
+    ? [
+        "Introduction to Databases",
+        "Database Concepts",
+        "Database Models",
+        "DBMS vs. RDBMS",
+        "SQL Basics",
+        "DDL",
+        "DML",
+        "Data Querying and Filtering",
+        "Advanced Querying",
+        "Data Integrity and Constraints",
+        "Views and Indexes",
+        "Transaction Management",
+        "Stored Procedures and Functions",
+        "Advanced Topics",
+        "Optimization and Performance Tuning",
+        "Data Security",
+        "Practical Applications",
+      ]
+    : type === "aptitude"
+    ? [
+        "Numbers",
+        "Work and Wages",
+        "Pipes and Cistern",
+        "Time, Speed, and Distance",
+        "Trains, Boats, and Streams",
+        "LCM and HCF",
+        "Percentages",
+        "Ratio, Proportion, and Partnership",
+        "Mixture and Alligations",
+        "Algebra",
+        "Average",
+        "Problem on Age",
+        "Profit and Loss",
+        "Simple Interest",
+        "Compound Interest",
+        "Mensuration 2D",
+        "Mensuration 3D",
+        "Trigonometry & Height and Distances",
+        "Progressions",
+        "Logarithms",
+        "Permutation and Combination",
+        "Probability",
+        "Geometry",
+        "Clocks",
+        "Calendars",
+        "Race",
+        "Simplification and Approximation",
+        "Data Interpretation",
+      ]
+    : [
+        "Number Series",
+        "Letter and Symbol Series",
+        "Verbal Classification",
+        "Analogies",
+        "Logical Problems",
+        "Course of Action",
+        "Statement and Conclusion",
+        "Theme Detection",
+        "Blood Relations",
+        "Directions",
+        "Statement and Argument",
+        "Logical Deduction",
+        "Letter Series",
+        "Coding Decoding",
+        "Statement and Assumptions",
+        "Logical Venn Diagram",
+        "Verbal Analogies",
+      ];
 
   const toggleTopic = (topic: string) => {
     setTopics((prev) =>
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]
     );
+  };
+
+  const toggleSelectAll = () => {
+    if (topics.length === availableTopics.length) {
+      setTopics([]); // Deselect all
+    } else {
+      setTopics([...availableTopics]); // Select all
+    }
   };
 
   const generateTest = async () => {
@@ -82,9 +152,12 @@ export default function TestSetup() {
         animate={{ opacity: 1, y: 0 }}
         className="relative w-full max-w-3xl p-10 rounded-3xl bg-zinc-900/80 backdrop-blur-2xl border border-zinc-700 shadow-[0_0_60px_rgba(0,0,0,0.8)] text-white"
       >
-        <h1 className="text-4xl font-extrabold mb-8 text-center">
+        <h1 className="text-4xl font-extrabold mb-2 text-center">
           🚀 Customize Your Test
         </h1>
+        <p className="text-sm text-gray-400 mb-6 text-center">
+          Each question has 60 seconds. You cannot tap more than once on an option.
+        </p>
 
         {/* Type + Difficulty */}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -130,8 +203,17 @@ export default function TestSetup() {
 
         {/* Topics */}
         <div className="mb-8">
-          <p className="text-sm text-gray-300 mb-3">Select Topics</p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex justify-between items-center mb-3">
+            <p className="text-sm text-gray-300">Select Topics</p>
+            <button
+              onClick={toggleSelectAll}
+              className="text-xs px-3 py-1 rounded-full bg-zinc-700 hover:bg-zinc-600 transition"
+            >
+              {topics.length === availableTopics.length ? "Deselect All" : "Select All"}
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-3 max-h-64 overflow-y-auto">
             {availableTopics.map((topic) => (
               <motion.button
                 key={topic}

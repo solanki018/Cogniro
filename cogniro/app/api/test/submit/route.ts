@@ -11,8 +11,6 @@ export async function POST(req: NextRequest) {
 
     const { testId, answers, userId } = await req.json();
 
-    // answers format:
-    // [{ questionId, selectedAnswer }]
 
     const questions = await Question.find({ testId });
 
@@ -30,14 +28,16 @@ export async function POST(req: NextRequest) {
       if (isCorrect) {
         correct++;
       } else {
-        // ❌ Save mistake
+
         await Mistake.create({
           userId,
           question: q.question,
           selectedAnswer: userAns?.selectedAnswer || "",
           correctAnswer: q.correctAnswer,
-          topic: q.topic,
+          // Topic ko string me convert karo agar array ho
+          topic: Array.isArray(q.topic) ? q.topic[0] : q.topic || "General",
         });
+
 
         // Track weak topics
         if (q.topic) {
@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
       q.userAnswer = userAns?.selectedAnswer;
       q.isCorrect = isCorrect;
       await q.save();
+
     }
 
     // ✅ Score calculate

@@ -7,6 +7,10 @@ const QuestionSchema = new Schema({
   topic: [String],
   correctAnswer: String,
   explanation: String, // Good to have for the results page
+
+   // For user evaluation
+  userAnswer: { type: String, default: "" },
+  isCorrect: { type: Boolean, default: null },
 });
 
 export default models.Question || model("Question", QuestionSchema);
