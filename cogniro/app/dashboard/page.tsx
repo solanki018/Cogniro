@@ -12,15 +12,33 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useRouter } from "next/navigation";
-import { Trash2, Flame, TrendingUp, Target, BrainCircuit, User } from "lucide-react";
+import { Trash2, Flame, TrendingUp, Target, BrainCircuit, User, LogOut } from "lucide-react";
 
 export default function Dashboard() {
   const router = useRouter();
   const [data, setData] = useState<any>(null);
+  const [pendingDeleteTestId, setPendingDeleteTestId] = useState<string | null>(null);
+  const [statusCard, setStatusCard] = useState<{ title: string; message: string } | null>(null);
+  const [userId] = useState<string>(() => {
+    if (typeof window === "undefined") return "";
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return "";
+    try {
+      return JSON.parse(storedUser)?._id || "";
+    } catch {
+      return "";
+    }
+  });
+
+  useEffect(() => {
+    if (!userId) router.push("/login");
+  }, [router, userId]);
 
   // Data fetch karne ka function (Delete ke baad refresh karne ke liye kaam aayega)
   const fetchDashboardData = useCallback(() => {
-    fetch("/api/performance/get")
+    if (!userId) return;
+
+    fetch(`/api/performance/get?userId=${userId}`)
       .then((res) => res.json())
       .then((d) => {
         const formattedHistory = (d.history || []).map((t: any) => ({
@@ -48,28 +66,45 @@ export default function Dashboard() {
           streak: 0,
         })
       );
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
   // DELETE FUNCTION
-  const handleDeleteTest = async (testId: string) => {
-    if (!confirm("Bhai, pakka delete karna hai ye test?")) return;
+  const handleDeleteTest = (testId: string) => {
+    setPendingDeleteTestId(testId);
+  };
 
+  const confirmDeleteTest = async () => {
+    if (!pendingDeleteTestId) return;
     try {
-      const res = await fetch(`/api/test/delete?testId=${testId}`, {
+      const res = await fetch(`/api/test/delete?testId=${pendingDeleteTestId}&userId=${userId}`, {
         method: "DELETE",
       });
 
       if (res.ok) {
-        fetchDashboardData(); // List refresh karo
+        fetchDashboardData();
+        setStatusCard({
+          title: "Deleted",
+          message: "Test record successfully delete ho gaya.",
+        });
       } else {
-        alert("Delete nahi ho paya!");
+        const d = await res.json().catch(() => ({}));
+        setStatusCard({
+          title: "Delete Failed",
+          message: d.message || "Delete nahi ho paya. Please try again.",
+        });
       }
     } catch (err) {
       console.error("Delete error:", err);
+      setStatusCard({
+        title: "Something Went Wrong",
+        message: "Network error aaya. Thoda baad try karo.",
+      });
+    } finally {
+      setPendingDeleteTestId(null);
     }
   };
 
@@ -78,6 +113,15 @@ export default function Dashboard() {
     if (streak >= 7) return "from-orange-500 to-red-600 shadow-orange-500/50";
     if (streak > 0) return "from-yellow-400 to-orange-500 shadow-yellow-500/50";
     return "from-zinc-400 to-zinc-500 shadow-zinc-500/50";
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("currentTestId");
+    localStorage.removeItem("currentQuestions");
+    localStorage.removeItem("currentAnswers");
+    localStorage.removeItem("result");
+    router.push("/login");
   };
 
   if (!data)
@@ -157,6 +201,13 @@ export default function Dashboard() {
   className="p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-sm font-semibold"
 >
   🧠 Mistake Notebook
+</button>
+        <button
+  onClick={handleLogout}
+  className="p-3 rounded-xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 dark:bg-red-900/10 dark:text-red-400 dark:border-red-900/30 text-sm font-semibold flex items-center justify-center gap-2"
+>
+  <LogOut size={16} />
+  Logout
 </button>
       </motion.div>
 
@@ -258,6 +309,48 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* DELETE CONFIRM CARD */}
+      {pendingDeleteTestId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl">
+            <h3 className="text-xl font-bold text-white">Delete Test Record?</h3>
+            <p className="mt-2 text-sm text-zinc-300">
+              Ye action undo nahi hoga. Kya aap is test history ko delete karna chahte ho?
+            </p>
+            <div className="mt-5 flex gap-3">
+              <button
+                onClick={() => setPendingDeleteTestId(null)}
+                className="flex-1 rounded-lg border border-zinc-600 bg-zinc-800 px-4 py-2 font-semibold text-zinc-200 hover:bg-zinc-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteTest}
+                className="flex-1 rounded-lg bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700"
+              >
+                Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STATUS CARD */}
+      {statusCard && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl">
+            <h3 className="text-xl font-bold text-white">{statusCard.title}</h3>
+            <p className="mt-2 text-sm text-zinc-300">{statusCard.message}</p>
+            <button
+              onClick={() => setStatusCard(null)}
+              className="mt-5 w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

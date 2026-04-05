@@ -7,8 +7,11 @@ export async function GET(req: NextRequest) {
   try {
     await connectDB();
 
-    // 🔥 Dynamic userId from query (or fallback temporary)
-    const userId = req.nextUrl.searchParams.get("userId") || "507f1f77bcf86cd799439011";
+    const userId = req.nextUrl.searchParams.get("userId");
+
+    if (!userId) {
+      return NextResponse.json({ message: "userId is required" }, { status: 400 });
+    }
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json({ message: "Invalid userId" }, { status: 400 });

@@ -41,13 +41,32 @@ export default function TestPage() {
   const submitTest = useCallback(async () => {
   if (!testId || isSubmitting) return;
 
+  const storedUser = localStorage.getItem("user");
+  if (!storedUser) {
+    router.push("/login");
+    return;
+  }
+
+  let userId = "";
+  try {
+    userId = JSON.parse(storedUser)?._id;
+  } catch {
+    router.push("/login");
+    return;
+  }
+
+  if (!userId) {
+    router.push("/login");
+    return;
+  }
+
   try {
     setIsSubmitting(true);
     
     const res = await fetch("/api/test/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ testId, userId: "507f1f77bcf86cd799439011", answers }),
+      body: JSON.stringify({ testId, userId, answers }),
     });
 
     const result = await res.json();

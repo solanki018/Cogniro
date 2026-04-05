@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Test from "@/models/Test";
 import Question from "@/models/Question";
+import mongoose from "mongoose";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -20,11 +21,15 @@ export async function POST(req: Request) {
 
     const { userId, type, difficulty, totalQuestions, topics = [] } = await req.json();
 
-    if (!type || !difficulty || !totalQuestions) {
+    if (!userId || !type || !difficulty || !totalQuestions) {
       return NextResponse.json(
-        { message: "type, difficulty and totalQuestions are required" },
+        { message: "userId, type, difficulty and totalQuestions are required" },
         { status: 400 }
       );
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return NextResponse.json({ message: "Invalid userId" }, { status: 400 });
     }
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });

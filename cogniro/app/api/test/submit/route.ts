@@ -4,6 +4,12 @@ import Question from "@/models/Question";
 import Test from "@/models/Test";
 import Mistake from "@/models/Mistake";
 import Performance from "@/models/Performance";
+import mongoose from "mongoose";
+
+type SubmittedAnswer = {
+  questionId: string;
+  selectedAnswer: string;
+};
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,16 +17,34 @@ export async function POST(req: NextRequest) {
 
     const { testId, answers, userId } = await req.json();
 
+    if (!testId || !userId || !Array.isArray(answers)) {
+      return NextResponse.json(
+        { message: "testId, userId and answers are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(testId) || !mongoose.Types.ObjectId.isValid(userId)) {
+      return NextResponse.json({ message: "Invalid testId or userId" }, { status: 400 });
+    }
+
+    const test = await Test.findOne({ _id: testId, userId });
+    if (!test) {
+      return NextResponse.json({ message: "Test not found for this user" }, { status: 404 });
+    }
 
     const questions = await Question.find({ testId });
+    if (!questions.length) {
+      return NextResponse.json({ message: "No questions found for this test" }, { status: 404 });
+    }
 
     let correct = 0;
-    let total = questions.length;
-    let weakTopicsMap: Record<string, number> = {};
+    const total = questions.length;
+    const weakTopicsMap: Record<string, number> = {};
 
-    for (let q of questions) {
+    for (const q of questions) {
       const userAns = answers.find(
-        (a: any) => a.questionId === q._id.toString()
+        (a: SubmittedAnswer) => a.questionId === q._id.toString()
       );
 
       const isCorrect = userAns?.selectedAnswer === q.correctAnswer;

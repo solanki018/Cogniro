@@ -1,15 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function MistakesPage() {
+  const router = useRouter();
   const [mistakes, setMistakes] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("/api/mistake/get")
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      router.push("/login");
+      return;
+    }
+
+    let userId = "";
+    try {
+      userId = JSON.parse(storedUser)?._id;
+    } catch {
+      router.push("/login");
+      return;
+    }
+
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
+
+    fetch(`/api/mistake/get?userId=${userId}`)
       .then((res) => res.json())
-      .then((data) => setMistakes(data.mistakes));
-  }, []);
+      .then((data) => setMistakes(data.mistakes || []));
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black p-6 text-zinc-900 dark:text-white">
@@ -30,7 +51,7 @@ export default function MistakesPage() {
           <div className="text-6xl mb-4">🎉</div>
           <p className="text-lg font-semibold">No mistakes yet</p>
           <p className="text-zinc-500 text-sm">
-            You're doing great! Keep practicing.
+            You&apos;re doing great! Keep practicing.
           </p>
         </div>
       )}

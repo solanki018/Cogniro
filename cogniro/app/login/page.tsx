@@ -24,6 +24,10 @@ export default function Login() {
     const data = await res.json();
 
     if (res.ok) {
+      localStorage.removeItem("currentTestId");
+      localStorage.removeItem("currentQuestions");
+      localStorage.removeItem("currentAnswers");
+      localStorage.removeItem("result");
       localStorage.setItem("user", JSON.stringify(data.user));
       router.push("/");
     } else {

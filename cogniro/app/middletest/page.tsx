@@ -12,6 +12,7 @@ export default function TestSetup() {
   const [numQuestions, setNumQuestions] = useState(5);
   const [topics, setTopics] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [statusCard, setStatusCard] = useState<{ title: string; message: string } | null>(null);
 
   // Dynamic topics based on type
   const availableTopics = type === "sql"
@@ -101,7 +102,29 @@ export default function TestSetup() {
 
   const generateTest = async () => {
     if (topics.length === 0) {
-      alert("Please select at least one topic");
+      setStatusCard({
+        title: "Topic Required",
+        message: "Test start karne se pehle kam se kam 1 topic select karo.",
+      });
+      return;
+    }
+
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      router.push("/login");
+      return;
+    }
+
+    let userId = "";
+    try {
+      userId = JSON.parse(storedUser)?._id;
+    } catch {
+      router.push("/login");
+      return;
+    }
+
+    if (!userId) {
+      router.push("/login");
       return;
     }
 
@@ -111,7 +134,7 @@ export default function TestSetup() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: "507f1f77bcf86cd799439011",
+          userId,
           type,
           difficulty,
           totalQuestions: numQuestions,
@@ -127,11 +150,17 @@ export default function TestSetup() {
         localStorage.removeItem("currentAnswers");
         router.push("/test");
       } else {
-        alert(data.message || "Error generating test");
+        setStatusCard({
+          title: "Test Create Failed",
+          message: data.message || "Test generate nahi ho paya. Please try again.",
+        });
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      setStatusCard({
+        title: "Something Went Wrong",
+        message: "Network issue aaya. Thoda baad try karo.",
+      });
     } finally {
       setLoading(false);
     }
@@ -242,6 +271,21 @@ export default function TestSetup() {
           {loading ? "Generating Test..." : "🚀 Start Test"}
         </motion.button>
       </motion.div>
+
+      {statusCard && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl text-white">
+            <h3 className="text-xl font-bold">{statusCard.title}</h3>
+            <p className="mt-2 text-sm text-zinc-300">{statusCard.message}</p>
+            <button
+              onClick={() => setStatusCard(null)}
+              className="mt-5 w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold hover:bg-blue-700"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
